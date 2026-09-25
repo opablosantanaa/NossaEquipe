@@ -25,7 +25,7 @@ public class Categoria {
     }
 
     public Categoria(String cargo, String funcao) {
-        this.cargo = cargo;
-        this.funcao = funcao;
+        setCargo(cargo);
+        setFuncao(funcao);
     }
 }
