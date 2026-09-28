@@ -283,7 +283,9 @@ public class MenuConsole {
     private void criarCategoria(){
         String escolha = "S";
         while(escolha.equalsIgnoreCase("s")) {
+            listaDeCategorias = repositoryCategoria.listarCategoria();
 
+            System.out.println();
             System.out.println("===== CRIADOR DE CATEGORIAS =====");
             Categoria categoria = new Categoria();
 
@@ -310,6 +312,7 @@ public class MenuConsole {
     private void listarCategorias(){
         listaDeCategorias = repositoryCategoria.listarCategoria();
 
+        System.out.println();
         System.out.println("===== LISTA DE CATEGORIAS =====");
 
         for (Categoria categoria : listaDeCategorias) {
@@ -324,27 +327,52 @@ public class MenuConsole {
     private void editarCategoria(){
         String escolha = "S";
         while(escolha.equalsIgnoreCase("s")) {
-            System.out.println("\n===== EDITOR DE CATEGORIAS =====");
-            Categoria categoria = new Categoria();
+            listaDeCategorias = repositoryCategoria.listarCategoria();
+
+            System.out.println();
+            System.out.println("===== EDITOR DE CATEGORIAS =====");
 
             System.out.print("\nInsira o ID da categoria que deseja editar: ");
             long idNew = scanner.nextInt();
-            categoria.setId(idNew);
-
             scanner.nextLine();
 
-            System.out.print("Cargo: ");
-            categoria.setCargo(scanner.nextLine());
+            Categoria categoriaExistente = null;
 
-            System.out.print("Função: ");
-            categoria.setFuncao(scanner.nextLine());
+            for (Categoria categoria : listaDeCategorias){
+                if(categoria.getId() == idNew){
+                    categoriaExistente = categoria;
+                    break;
+                }
+            }
 
-            boolean atualizou = repositoryCategoria.editarCategoria(idNew, categoria);
-
-            if (atualizou) {
-                System.out.println("Categoria atualizada com sucesso!");
-            } else{
+            if(categoriaExistente == null){
                 System.out.println("ID não encontrado");
+            } else {
+                System.out.println("\nO que deseja atualizar?");
+                System.out.println("1 - CARGO");
+                System.out.println("2 - FUNÇÃO");
+                System.out.println("0 - NÃO FAZER ALTERAÇÃO");
+
+                int escolhaNumber = scanner.nextInt();
+                scanner.nextLine();
+
+                switch (escolhaNumber){
+                    case 1:
+                        System.out.print("Cargo: ");
+                        categoriaExistente.setCargo(scanner.nextLine());
+                        break;
+
+                    case 2:
+                        System.out.print("Função: ");
+                        categoriaExistente.setFuncao(scanner.nextLine());
+                        break;
+
+                    default:
+                        System.out.println("Sem alterações");
+                }
+
+                repositoryCategoria.editarCategoria(idNew, categoriaExistente);
+                System.out.println("Categoria atualizada com sucesso!");
             }
             System.out.println();
             System.out.println("Deseja atualizar outra categoria? (S/N)");
@@ -377,6 +405,7 @@ public class MenuConsole {
     private void criarFuncionario(){
         String escolha = "S";
         while(escolha.equalsIgnoreCase("s")) {
+            System.out.println();
             System.out.println("===== CRIADOR DE FUNCIONÁRIOS =====");
             Funcionario funcionario = new Funcionario();
 
@@ -393,20 +422,20 @@ public class MenuConsole {
 
             scanner.nextLine();
 
-            if(listaDeCategorias.isEmpty()){
+            if (listaDeCategorias.isEmpty()) {
                 System.out.println("Nenhuma categoria registrada. Cadastre uma categoria primeiro");
-            } else{
+            } else {
                 System.out.println("Categorias disponiveis:");
                 listarCategorias();
                 System.out.println();
                 System.out.print("Escolha uma categoria (" + 1 + "/" + listaDeCategorias.size() + "): ");
                 int escolhaCategoria = scanner.nextInt();
                 scanner.nextLine();
-                int indiceCategoria = escolhaCategoria -1;
-                if(indiceCategoria < 0 || indiceCategoria >= listaDeCategorias.size()){
+                int indiceCategoria = escolhaCategoria - 1;
+                if (indiceCategoria < 0 || indiceCategoria >= listaDeCategorias.size()) {
                     System.out.println("Categoria inválida!");
                     continue;
-                } else{
+                } else {
                     Categoria categoriaEscolhida = listaDeCategorias.get(indiceCategoria);
                     funcionario.setCategoria(categoriaEscolhida);
                 }
@@ -429,11 +458,13 @@ public class MenuConsole {
 
             scanner.nextLine();
 
-            repositoryFuncionario.salvarFuncionario(funcionario);
+            boolean salvou = repositoryFuncionario.salvarFuncionario(funcionario);
 
-            System.out.println("Funcionário criado com sucesso!");
+            if(salvou) {
+                System.out.println("Funcionário criado com sucesso!");
+            }
             System.out.println();
-            System.out.println("Deseja criar mais um funcionário? (S/N)");
+            System.out.println("Deseja criar outro funcionário? (S/N)");
             escolha = scanner.nextLine();
         }
     }
@@ -441,23 +472,26 @@ public class MenuConsole {
     private void listarFuncionarios(){
         listaDeFuncionarios = repositoryFuncionario.listarFuncionarios();
 
+        System.out.println();
         System.out.println("===== LISTA DE FUNCIONÁRIOS =====");
 
         for(Funcionario funcionario : listaDeFuncionarios){
+            System.out.println("\n==== FUNCIONÁRIO " + (listaDeFuncionarios.indexOf(funcionario) + 1) + " ====");
             System.out.println("ID: " + funcionario.getId());
             System.out.println("Nome: " + funcionario.getNome());
             System.out.println("Cargo | Função: " + funcionario.getCategoria().getCargo() + " | "
                     + funcionario.getCategoria().getFuncao());
             System.out.println("Salário: " + funcionario.getSalario());
             System.out.println("Idade: " + funcionario.getIdade());
-            System.out.println();
+            System.out.println("========================");
         }
     }
 
     private void buscarFuncionarioById(){
         String escolha = "S";
         while(escolha.equalsIgnoreCase("s")) {
-
+            listaDeFuncionarios = repositoryFuncionario.listarFuncionarios();
+            System.out.println();
             System.out.println("===== BUSCA POR ID =====");
 
             System.out.print("\nInsira o ID do funcionário que deseja buscar: ");
@@ -468,13 +502,14 @@ public class MenuConsole {
                 System.out.println("Funcionário encontrado com sucesso!");
                 List<Funcionario> encontrarFuncionario = repositoryFuncionario.listarFuncionariosById(idSearch);
                 for(Funcionario funcionario : encontrarFuncionario){
+                    System.out.println("\n==== FUNCIONÁRIO " + (listaDeFuncionarios.indexOf(funcionario) + 1) + " ====");
                     System.out.println("ID: " + funcionario.getId());
                     System.out.println("Nome: " + funcionario.getNome());
                     System.out.println("Cargo | Função: " + funcionario.getCategoria().getCargo() + " | "
                             + funcionario.getCategoria().getFuncao());
                     System.out.println("Salário: " + funcionario.getSalario());
                     System.out.println("Idade: " + funcionario.getIdade());
-                    System.out.println();
+                    System.out.println("========================");
                 }
             } else{
                 System.out.println("ID não encontrado!");
@@ -488,9 +523,10 @@ public class MenuConsole {
     private void editarFuncionario(){
         String escolha = "S";
         while(escolha.equalsIgnoreCase("s")) {
-
-            System.out.println("\n===== EDITOR DE FUNCIONÁRIOS =====");
             listaDeFuncionarios = repositoryFuncionario.listarFuncionarios();
+
+            System.out.println();
+            System.out.println("===== EDITOR DE FUNCIONÁRIOS =====");
 
             System.out.print("\nInsira o ID do funcionário que deseja editar: ");
             long idNew = scanner.nextInt();
@@ -570,7 +606,7 @@ public class MenuConsole {
                 }
 
                 repositoryFuncionario.editarFuncionario(idNew, funcionarioExistente);
-                System.out.println("Funcionário atualizada com sucesso!");
+                System.out.println("Funcionário atualizado com sucesso!");
             }
             System.out.println();
             System.out.println("Deseja atualizar outro funcionário? (S/N)");
@@ -583,6 +619,7 @@ public class MenuConsole {
         while(escolha.equalsIgnoreCase("s")) {
             listaDeFuncionarios = repositoryFuncionario.listarFuncionarios();
 
+            System.out.println();
             System.out.println("===== REMOVEDOR DE FUNCIONÁRIOS =====");
 
             System.out.print("\nInsira o ID do funcionário que deseja remover: ");

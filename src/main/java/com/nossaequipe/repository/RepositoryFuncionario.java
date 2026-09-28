@@ -12,7 +12,12 @@ public class RepositoryFuncionario implements InterfaceRepositoryFuncionario{
     @Override
     public boolean salvarFuncionario(Funcionario funcionario) {
         try{
-            listaDeFuncionarios.add(funcionario);
+            if(funcionario.getIdade() >= 16) {
+                listaDeFuncionarios.add(funcionario);
+            } else{
+                System.out.println("\nFuncionário não registrado. Abaixo da idade mínima!");
+                return false;
+            }
         } catch (Exception e) {
             return false;
         }
