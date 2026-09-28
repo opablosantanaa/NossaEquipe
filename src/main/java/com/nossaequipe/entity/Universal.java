@@ -1,25 +1,16 @@
 package com.nossaequipe.entity;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
-public class Universal {
+public class Universal implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private String nome;
-    private UUID uuid;
+    private long id;
     private LocalDateTime dataTime;
-    public enum status{
-        ativo("Ativo"),
-        inativo("Inativo");
-
-        String descricao;
-
-        status (String descricao){
-            this.descricao = descricao;
-        }
-
-        public String getDescricao(){
-            return descricao;
-        }
-    }
 
     public String getNome() {
         return nome;
@@ -29,12 +20,12 @@ public class Universal {
         this.nome = nome;
     }
 
-    public UUID getUuid() {
-        return uuid;
+    public long getId() {
+        return id;
     }
 
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public LocalDateTime getDataTime() {

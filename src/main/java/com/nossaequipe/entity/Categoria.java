@@ -1,6 +1,8 @@
 package com.nossaequipe.entity;
 
-public class Categoria {
+public class Categoria extends Universal{
+    private static final long serialVersionUID = 1L;
+
     private String cargo;
     private String funcao;
 
@@ -24,7 +26,8 @@ public class Categoria {
 
     }
 
-    public Categoria(String cargo, String funcao) {
+    public Categoria(long id, String cargo, String funcao) {
+        setId(id);
         setCargo(cargo);
         setFuncao(funcao);
     }

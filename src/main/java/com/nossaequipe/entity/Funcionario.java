@@ -5,20 +5,20 @@ import java.time.Period;
 import java.time.format.DateTimeFormatter;
 
 public class Funcionario extends Universal{
+    private static final long serialVersionUID = 1L;
+    private static final DateTimeFormatter FORMATAR_DATA = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-    DateTimeFormatter formatardata = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-    private double salario;
+    private float salario;
     private Categoria categoria;
     private int ano, mes, data;
     private LocalDate dataDeNascimento;
     private String dataString;
 
-    public double getSalario() {
+    public float getSalario() {
         return salario;
     }
 
-    public void setSalario(double salario) {
+    public void setSalario(float salario) {
         this.salario = salario;
     }
 
@@ -30,11 +30,36 @@ public class Funcionario extends Universal{
         this.categoria = categoria;
     }
 
+    public int getAno() {
+        return ano;
+    }
+
+    public void setAno(int ano) {
+        this.ano = ano;
+    }
+
+    public int getMes() {
+        return mes;
+    }
+
+    public void setMes(int mes) {
+        this.mes = mes;
+    }
+
+    public int getData() {
+        return data;
+    }
+
+    public void setData(int data) {
+        this.data = data;
+    }
+
     public LocalDate getDataDeNascimento() {
         return dataDeNascimento;
     }
 
     public void setDataDeNascimento(LocalDate dataDeNascimento) {
+        dataDeNascimento = LocalDate.of(ano, mes, data);
         this.dataDeNascimento = dataDeNascimento;
     }
 
@@ -43,7 +68,7 @@ public class Funcionario extends Universal{
     }
 
     public void setDataString(LocalDate dataDeNascimento){
-        this.dataString = this.dataDeNascimento.format(formatardata);
+        this.dataString = this.dataDeNascimento.format(FORMATAR_DATA);
     }
 
     public final int idade(final LocalDate dataDeNascimento){
@@ -60,7 +85,8 @@ public class Funcionario extends Universal{
 
     }
 
-    public Funcionario(String nome, double salario, Categoria categoria, int data, int mes, int ano) {
+    public Funcionario(long id, String nome, float salario, Categoria categoria, int data, int mes, int ano) {
+        setId(id);
         setNome(nome);
         setSalario(salario);
         setCategoria(categoria);
