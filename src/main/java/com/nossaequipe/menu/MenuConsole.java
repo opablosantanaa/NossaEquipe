@@ -294,17 +294,22 @@ public class MenuConsole {
 
             scanner.nextLine();
 
-            System.out.print("Cargo: ");
-            categoria.setCargo(scanner.nextLine());
+            boolean check = listaDeCategorias.stream().anyMatch(categoriaId ->
+                    categoriaId.getId() == categoria.getId());
 
-            System.out.print("Função: ");
-            categoria.setFuncao(scanner.nextLine());
+            if (!check) {
+                System.out.print("Cargo: ");
+                categoria.setCargo(scanner.nextLine());
+
+                System.out.print("Função: ");
+                categoria.setFuncao(scanner.nextLine());
+
+                System.out.println("Categoria criada com sucesso!");
+            }
 
             repositoryCategoria.salvarCategoria(categoria);
-
-            System.out.println("Categoria criada com sucesso!");
             System.out.println();
-            System.out.println("Deseja criar mais uma categoria? (S/N)");
+            System.out.println("Deseja criar outra categoria? (S/N)");
             escolha = scanner.nextLine();
         }
     }
@@ -405,6 +410,8 @@ public class MenuConsole {
     private void criarFuncionario(){
         String escolha = "S";
         while(escolha.equalsIgnoreCase("s")) {
+            listaDeFuncionarios = repositoryFuncionario.listarFuncionarios();
+
             System.out.println();
             System.out.println("===== CRIADOR DE FUNCIONÁRIOS =====");
             Funcionario funcionario = new Funcionario();
@@ -414,55 +421,57 @@ public class MenuConsole {
 
             scanner.nextLine();
 
-            System.out.print("Nome: ");
-            funcionario.setNome(scanner.nextLine());
+            boolean check = listaDeFuncionarios.stream().anyMatch(funcionarioId ->
+                    funcionarioId.getId() == funcionario.getId());
 
-            System.out.print("Salário: ");
-            funcionario.setSalario(scanner.nextFloat());
+            if (!check) {
+                System.out.print("Nome: ");
+                funcionario.setNome(scanner.nextLine());
 
-            scanner.nextLine();
+                System.out.print("Salário: ");
+                funcionario.setSalario(scanner.nextFloat());
 
-            if (listaDeCategorias.isEmpty()) {
-                System.out.println("Nenhuma categoria registrada. Cadastre uma categoria primeiro");
-            } else {
-                System.out.println("Categorias disponiveis:");
-                listarCategorias();
-                System.out.println();
-                System.out.print("Escolha uma categoria (" + 1 + "/" + listaDeCategorias.size() + "): ");
-                int escolhaCategoria = scanner.nextInt();
                 scanner.nextLine();
-                int indiceCategoria = escolhaCategoria - 1;
-                if (indiceCategoria < 0 || indiceCategoria >= listaDeCategorias.size()) {
-                    System.out.println("Categoria inválida!");
-                    continue;
+
+                if (listaDeCategorias.isEmpty()) {
+                    System.out.println("Nenhuma categoria registrada. Cadastre uma categoria primeiro");
                 } else {
-                    Categoria categoriaEscolhida = listaDeCategorias.get(indiceCategoria);
-                    funcionario.setCategoria(categoriaEscolhida);
+                    System.out.println("Categorias disponiveis:");
+                    listarCategorias();
+                    System.out.println();
+                    System.out.print("Escolha uma categoria (" + 1 + "/" + listaDeCategorias.size() + "): ");
+                    int escolhaCategoria = scanner.nextInt();
+                    scanner.nextLine();
+                    int indiceCategoria = escolhaCategoria - 1;
+                    if (indiceCategoria < 0 || indiceCategoria >= listaDeCategorias.size()) {
+                        System.out.println("Categoria inválida!");
+                        continue;
+                    } else {
+                        Categoria categoriaEscolhida = listaDeCategorias.get(indiceCategoria);
+                        funcionario.setCategoria(categoriaEscolhida);
+                    }
                 }
-            }
 
-            System.out.print("Insira sua data de aniversário: ");
-            funcionario.setData(scanner.nextInt());
+                System.out.print("Insira sua data de aniversário: ");
+                funcionario.setData(scanner.nextInt());
 
-            System.out.print("Insira seu mês de aniversário (SEM 0 ANTES DO NÚMERO. EX: 4 AO INVÉS DE 04): ");
-            funcionario.setMes(scanner.nextInt());
+                System.out.print("Insira seu mês de aniversário (SEM 0 ANTES DO NÚMERO. EX: 4 AO INVÉS DE 04): ");
+                funcionario.setMes(scanner.nextInt());
 
-            System.out.print("Insira seu ano de nascimento: ");
-            funcionario.setAno(scanner.nextInt());
+                System.out.print("Insira seu ano de nascimento: ");
+                funcionario.setAno(scanner.nextInt());
 
-            LocalDate dataDeNascimento = LocalDate.of(funcionario.getAno(),
-                    funcionario.getMes(), funcionario.getData());
+                LocalDate dataDeNascimento = LocalDate.of(funcionario.getAno(),
+                        funcionario.getMes(), funcionario.getData());
 
-            funcionario.setDataDeNascimento(dataDeNascimento);
-            funcionario.setDataString(dataDeNascimento);
-
-            scanner.nextLine();
-
-            boolean salvou = repositoryFuncionario.salvarFuncionario(funcionario);
-
-            if(salvou) {
+                funcionario.setDataDeNascimento(dataDeNascimento);
+                funcionario.setDataString(dataDeNascimento);
+                scanner.nextLine();
                 System.out.println("Funcionário criado com sucesso!");
             }
+
+            repositoryFuncionario.salvarFuncionario(funcionario);
+
             System.out.println();
             System.out.println("Deseja criar outro funcionário? (S/N)");
             escolha = scanner.nextLine();
@@ -498,7 +507,8 @@ public class MenuConsole {
             long idSearch = scanner.nextInt();
             scanner.nextLine();
 
-            if (listaDeFuncionarios.stream().anyMatch(funcionarioExist -> funcionarioExist.getId() == idSearch)){
+            if (listaDeFuncionarios.stream().anyMatch(funcionarioExist ->
+                    funcionarioExist.getId() == idSearch)){
                 System.out.println("Funcionário encontrado com sucesso!");
                 List<Funcionario> encontrarFuncionario = repositoryFuncionario.listarFuncionariosById(idSearch);
                 for(Funcionario funcionario : encontrarFuncionario){
@@ -626,7 +636,8 @@ public class MenuConsole {
             long idRemove = scanner.nextInt();
             scanner.nextLine();
 
-            if (listaDeFuncionarios.stream().anyMatch(funcionarioExist -> funcionarioExist.getId() == idRemove)){
+            if (listaDeFuncionarios.stream().anyMatch(funcionarioExist ->
+                    funcionarioExist.getId() == idRemove)){
                 System.out.println("Funcionário removida com sucesso!");
                 repositoryFuncionario.deletarFuncionario(idRemove);
             } else{

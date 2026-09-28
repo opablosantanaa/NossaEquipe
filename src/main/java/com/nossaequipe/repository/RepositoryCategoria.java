@@ -13,10 +13,17 @@ public class RepositoryCategoria implements InterfaceRepositoryCategoria{
 
     @Override
     public boolean salvarCategoria(Categoria categoria) {
-        try{
-            listaDeCategorias.add(categoria);
-        } catch (Exception e) {
-            return false;
+        boolean jaExiste = listaDeCategorias.stream()
+                .anyMatch(categoriaCheck -> categoriaCheck.getId() == categoria.getId());
+
+        if (jaExiste) {
+            System.out.println("Registro já cadastrado.");
+        }else {
+            try{
+                listaDeCategorias.add(categoria);
+            } catch (Exception e) {
+                return false;
+            }
         }
         return true;
     }
