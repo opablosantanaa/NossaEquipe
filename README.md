@@ -11,6 +11,8 @@ O **Nossa Equipe** é um sistema de gerenciamento corporativo de funcionários d
 ### 🔗 Links
 - **💻 Repositório:** [GitHub - Nossa Equipe](https://github.com/opablosantanaa/NossaEquipe)
 
+> 🔗 **Link da Apresentação em Vídeo:** https://drive.google.com/file/d/1rM2zUoGiw8n11sTAvRP2wYLHb3XIONij/view?usp=sharing
+
 ---
 
 ## 📦 Módulos e Funcionalidades Detalhadas
